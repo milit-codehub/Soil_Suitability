@@ -9,7 +9,10 @@ from image_processing import segment_and_extract_features
 from gsd_engine import calculate_gsd_and_usda
 from crop_recommender import evaluate_crop_suitability
 from visualization import generate_diagnostic_plots
+<<<<<<< HEAD
 from llm_advisor import generate_llm_advisory
+=======
+>>>>>>> 3c83f69ffa1bf7898c9aa2565deaf82552339bcc
 
 st.set_page_config(
     page_title="Soil Particle Analyzer",
@@ -104,6 +107,7 @@ def main():
         )
         st.pyplot(fig)
 
+<<<<<<< HEAD
         st.write("---") 
         st.subheader("🤖 AI Agronomic Advisory Copilot (GenAI)") 
 
@@ -112,6 +116,8 @@ def main():
                 report = generate_llm_advisory(metrics) 
                 st.markdown(report)
 
+=======
+>>>>>>> 3c83f69ffa1bf7898c9aa2565deaf82552339bcc
         # --- NEW: Soil Color & RGB Analysis Block ---
         st.write("---")
         st.subheader("🎨 Soil Color & RGB Analysis")

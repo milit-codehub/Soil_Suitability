@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 streamlit>=1.25.0
 opencv-python>=4.8.0
 pandas>=2.0.0
 numpy>=1.24.0
 matplotlib>=3.7.0
+=======
+streamlit>=1.25.0
+opencv-python-headless>=4.8.0
+pandas>=2.0.0
+numpy>=1.24.0
+matplotlib>=3.7.0
+>>>>>>> 3c83f69ffa1bf7898c9aa2565deaf82552339bcc
