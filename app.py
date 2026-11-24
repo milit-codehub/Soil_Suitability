@@ -10,7 +10,7 @@ from image_processing import segment_and_extract_features
 from gsd_engine import calculate_gsd_and_usda
 from crop_recommender import evaluate_crop_suitability
 from visualization import generate_diagnostic_plots
-from llm_advisorv2 import generate_llm_advisory
+from llm_advisorv3 import generate_llm_advisory
 
 st.set_page_config(page_title="Soil Particle Analyzer", layout="wide")
 
