@@ -1,6 +1,7 @@
 """
 app.py - Clean Modular Streamlit UI Frontend (Student Version)
 """
+
 import pandas as pd
 import streamlit as st
 
@@ -9,15 +10,10 @@ from image_processing import segment_and_extract_features
 from gsd_engine import calculate_gsd_and_usda
 from crop_recommender import evaluate_crop_suitability
 from visualization import generate_diagnostic_plots
-<<<<<<< HEAD
 from llm_advisor import generate_llm_advisory
-=======
->>>>>>> 3c83f69ffa1bf7898c9aa2565deaf82552339bcc
 
-st.set_page_config(
-    page_title="Soil Particle Analyzer",
-    layout="wide"
-)
+st.set_page_config(page_title="Soil Particle Analyzer", layout="wide")
+
 
 def main():
     st.title("Soil Particle Analysis & Crop Suitability")
@@ -28,13 +24,13 @@ def main():
     input_mode = st.sidebar.radio("Input Source", ["Image Upload", "CSV Upload"])
 
     scale_factor = st.sidebar.number_input(
-        "Scale Factor (mm/pixel)", 
-        min_value=0.0001, 
-        max_value=1.0, 
-        value=DEFAULT_SCALE_FACTOR, 
+        "Scale Factor (mm/pixel)",
+        min_value=0.0001,
+        max_value=1.0,
+        value=DEFAULT_SCALE_FACTOR,
         step=0.005,
         format="%.4f",
-        help="Example: 10mm scale bar / 500 pixels = 0.02 mm/px"
+        help="Example: 10mm scale bar / 500 pixels = 0.02 mm/px",
     )
 
     min_area_px = st.sidebar.number_input(
@@ -42,7 +38,7 @@ def main():
         min_value=1,
         max_value=100,
         value=DEFAULT_MIN_AREA_PX,
-        step=1
+        step=1,
     )
 
     df_particles = None
@@ -51,17 +47,25 @@ def main():
 
     # Input Processing
     if input_mode == "Image Upload":
-        uploaded_file = st.file_uploader("Upload Soil Photograph (.jpg, .png)", type=["jpg", "jpeg", "png"])
+        uploaded_file = st.file_uploader(
+            "Upload Soil Photograph (.jpg, .png)", type=["jpg", "jpeg", "png"]
+        )
         if uploaded_file is not None:
             image_bytes = uploaded_file.read()
             with st.spinner("Processing image and segmenting soil particles..."):
-                df_particles, overlay_img, orig_img = segment_and_extract_features(image_bytes, min_area_px=min_area_px)
+                df_particles, overlay_img, orig_img = segment_and_extract_features(
+                    image_bytes, min_area_px=min_area_px
+                )
             st.success(f"Successfully detected {len(df_particles)} soil particles!")
     else:
-        uploaded_csv = st.file_uploader("Upload Particle Measurements CSV", type=["csv"])
+        uploaded_csv = st.file_uploader(
+            "Upload Particle Measurements CSV", type=["csv"]
+        )
         if uploaded_csv is not None:
             df_particles = pd.read_csv(uploaded_csv)
-            st.success(f"Successfully loaded CSV dataset with {len(df_particles)} particle rows!")
+            st.success(
+                f"Successfully loaded CSV dataset with {len(df_particles)} particle rows!"
+            )
 
     # Dashboard Display
     if df_particles is not None and not df_particles.empty:
@@ -79,7 +83,9 @@ def main():
 
         # Calculate GSD & USDA Metrics
         metrics = calculate_gsd_and_usda(df_particles, scale_factor=scale_factor)
-        recs, packing_note = evaluate_crop_suitability(metrics['texture_class'], metrics['Cu'])
+        recs, packing_note = evaluate_crop_suitability(
+            metrics["texture_class"], metrics["Cu"]
+        )
 
         st.subheader("Soil Classification & Metrics")
 
@@ -102,37 +108,41 @@ def main():
         st.subheader("Grain Size Distribution & Particle Histogram")
 
         fig = generate_diagnostic_plots(
-            metrics['df_sorted'], df_particles,
-            metrics['d10'], metrics['d50'], metrics['d60']
+            metrics["df_sorted"],
+            df_particles,
+            metrics["d10"],
+            metrics["d50"],
+            metrics["d60"],
         )
         st.pyplot(fig)
 
-<<<<<<< HEAD
-        st.write("---") 
-        st.subheader("🤖 AI Agronomic Advisory Copilot (GenAI)") 
+        st.write("---")
+        st.subheader("🤖 AI Agronomic Advisory Copilot (GenAI)")
 
         if st.button("✨ Generate AI Agronomic Report"):
-             with st.spinner("Analyzing soil transport metrics with Gemini AI..."): 
-                report = generate_llm_advisory(metrics) 
+            with st.spinner("Analyzing soil transport metrics with Gemini AI..."):
+                report = generate_llm_advisory(metrics)
                 st.markdown(report)
 
-=======
->>>>>>> 3c83f69ffa1bf7898c9aa2565deaf82552339bcc
         # --- NEW: Soil Color & RGB Analysis Block ---
         st.write("---")
         st.subheader("🎨 Soil Color & RGB Analysis")
         col_c1, col_c2 = st.columns([1, 3])
 
         with col_c1:
-            hex_color = f"#{metrics['avg_r']:02x}{metrics['avg_g']:02x}{metrics['avg_b']:02x}"
+            hex_color = (
+                f"#{metrics['avg_r']:02x}{metrics['avg_g']:02x}{metrics['avg_b']:02x}"
+            )
             st.markdown(
                 f"""
                 <div style="background-color:{hex_color}; width:100%; height:75px; 
                             border-radius:6px; border: 1px solid #ccc;"></div>
                 """,
-                unsafe_allow_html=True
+                unsafe_allow_html=True,
             )
-            st.caption(f"Color Swatch | RGB: ({metrics['avg_r']}, {metrics['avg_g']}, {metrics['avg_b']})")
+            st.caption(
+                f"Color Swatch | RGB: ({metrics['avg_r']}, {metrics['avg_g']}, {metrics['avg_b']})"
+            )
 
         with col_c2:
             st.markdown(f"**Soil Tone Classification:** {metrics['color_tone']}")
@@ -149,13 +159,14 @@ def main():
             st.write("")
 
         st.write("---")
-        csv_bytes = df_particles.to_csv(index=False).encode('utf-8')
+        csv_bytes = df_particles.to_csv(index=False).encode("utf-8")
         st.download_button(
             label="Download Particle Measurements (CSV)",
             data=csv_bytes,
             file_name="soil_particles_measured.csv",
-            mime="text/csv"
+            mime="text/csv",
         )
+
 
 if __name__ == "__main__":
     main()
