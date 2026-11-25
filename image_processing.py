@@ -1,15 +1,8 @@
-"""
-image_processing.py - Stage 1: OpenCV Segmentation & Feature Extraction
-"""
 import cv2
 import numpy as np
 import pandas as pd
 
 def segment_and_extract_features(image_input, min_area_px=5):
-    """
-    Takes image bytes or file path, runs OpenCV binarization & contour detection,
-    and extracts 15 geometric particle features.
-    """
     if isinstance(image_input, bytes):
         file_bytes = np.asarray(bytearray(image_input), dtype=np.uint8)
         img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)

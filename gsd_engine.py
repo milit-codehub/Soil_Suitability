@@ -1,11 +1,7 @@
-"""
-gsd_engine.py - Stage 2 & 3: Calibration, GSD Metrics (d10, d50, d60, Cu) & USDA Textural Binning
-"""
 import numpy as np
 import pandas as pd
 
 def classify_soil_color(mean_r, mean_g, mean_b):
-    """Classifies soil color tone and estimates organic matter / mineral content."""
     brightness = (mean_r + mean_g + mean_b) / 3.0
     
     if brightness < 90:
@@ -24,10 +20,6 @@ def classify_soil_color(mean_r, mean_g, mean_b):
     return tone, desc, round(brightness, 1)
 
 def calculate_gsd_and_usda(df, scale_factor=0.02):
-    """
-    Computes scale conversion, cumulative mass proxy passing curve,
-    d10, d50, d60 percentile diameters, Uniformity Coefficient Cu, and USDA texturing.
-    """
     df["Area_mm2"] = df["Area"] * (scale_factor ** 2)
     df["d_eq_mm"] = 2 * np.sqrt(df["Area_mm2"] / np.pi)
 

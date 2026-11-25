@@ -1,7 +1,3 @@
-"""
-app.py - Clean Modular Streamlit UI Frontend (Student Version)
-"""
-
 import pandas as pd
 import streamlit as st
 
@@ -10,7 +6,7 @@ from image_processing import segment_and_extract_features
 from gsd_engine import calculate_gsd_and_usda
 from crop_recommender import evaluate_crop_suitability
 from visualization import generate_diagnostic_plots
-from llm_advisorv3 import generate_llm_advisory
+from llm_advisorv4 import generate_llm_advisory
 
 st.set_page_config(page_title="Soil Particle Analyzer", layout="wide")
 
@@ -19,7 +15,6 @@ def main():
     st.title("Soil Particle Analysis & Crop Suitability")
     st.caption("Exploratory Project | Milit Srivastava, Viral Chauhan, Aditya Singh")
 
-    # Sidebar Configuration
     st.sidebar.header("Input Settings")
     input_mode = st.sidebar.radio("Input Source", ["Image Upload", "CSV Upload"])
 
@@ -45,7 +40,6 @@ def main():
     orig_img = None
     overlay_img = None
 
-    # Input Processing
     if input_mode == "Image Upload":
         uploaded_file = st.file_uploader(
             "Upload Soil Photograph (.jpg, .png)", type=["jpg", "jpeg", "png"]
@@ -67,11 +61,9 @@ def main():
                 f"Successfully loaded CSV dataset with {len(df_particles)} particle rows!"
             )
 
-    # Dashboard Display
     if df_particles is not None and not df_particles.empty:
         st.write("---")
 
-        # Image Previews
         if overlay_img is not None:
             col1, col2 = st.columns(2)
             with col1:
@@ -81,7 +73,6 @@ def main():
                 st.subheader("Particle Detection Overlay")
                 st.image(overlay_img, use_container_width=True)
 
-        # Calculate GSD & USDA Metrics
         metrics = calculate_gsd_and_usda(df_particles, scale_factor=scale_factor)
         recs, packing_note = evaluate_crop_suitability(
             metrics["texture_class"], metrics["Cu"]
@@ -117,14 +108,13 @@ def main():
         st.pyplot(fig)
 
         st.write("---")
-        st.subheader("🤖 AI Agronomic Advisory Copilot (GenAI)")
+        st.subheader("AI Agronomic Advisory")
 
         if st.button("✨ Generate AI Agronomic Report"):
             with st.spinner("Analyzing soil transport metrics with Gemini AI..."):
                 report = generate_llm_advisory(metrics)
                 st.markdown(report)
 
-        # --- NEW: Soil Color & RGB Analysis Block ---
         st.write("---")
         st.subheader("🎨 Soil Color & RGB Analysis")
         col_c1, col_c2 = st.columns([1, 3])
